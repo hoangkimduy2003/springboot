@@ -1,0 +1,37 @@
+<html layout:decorate="/home.html">
+<head>
+    <title>Quản lý khiếu nại</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="navbar navbar-light bg-light">
+        <form action="" method="get">
+            <label for="keyWord"></label>
+            <input id="keyWord" type="text" placeholder="ID Ticket, SDT khách hàng"
+                   style="width: 200px" name="keyWord" th:value="${keyWord}">
+            <button type="submit">Search</button>
+        </form>
+        <a class="btn btn-primary" th:href="@{/department/viewInput}">Tạo</a>
+    </div>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Tên</th>
+                <th scope="col">Ngày tạo</th>
+                <th scope="col">Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="t : ${departmentList}">
+                <th scope="row" th:text="${t.id}"></th>
+                <td th:text="${t.name}"></td>
+                <td th:text="${t.createdAt}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

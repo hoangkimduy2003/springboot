@@ -1,0 +1,57 @@
+<html layout:decorate="/home.html">
+<head>
+    <title>Quản lý khiếu nại</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="navbar navbar-light bg-light">
+        <form th:action="@{/viewTicket}" method="get" th:object="${searchDTO}">
+            <label for="keyWord"></label>
+            <input id="keyWord" type="text" placeholder="ID Ticket, SDT khách hàng"
+                   style="width: 200px" name="keyWord" th:field="*{keyWord}">
+            <label for="department">Phòng ban</label>
+            <select id="department" name="departmentId" th:field="*{departmentId}">
+                <option value="0">-Phòng ban-</option>
+                <option th:each="d : ${departmentList}" th:text="${d.name}" th:value="${d.id}" ></option>
+            </select>
+            <label for="from">From</label>
+            <input id="from" type="date" name="start" th:field="*{start}">
+            <label for="to">to</label>
+            <input id="to" type="date" name="end"  th:field="*{end}">
+            <button type="submit">Tìm kiếm</button>
+        </form>
+        <a class="btn btn-primary" th:href="@{/ticket/viewInput}">Tạo</a>
+    </div>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Ticket ID</th>
+                <th scope="col">Phòng ban tiếp nhận</th>
+                <th scope="col">SDT khách hàng</th>
+                <th scope="col">Ý kiến KH</th>
+                <th scope="col">Thời gian tiếp nhận</th>
+                <th scope="col">Nội dung xử lý</th>
+                <th scope="col">Trạng thái xử lý</th>
+                <th scope="col">Thời gian xử lý</th>
+                <th scope="col">Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="t : ${ticketList}">
+                <th scope="row" th:text="${t.id}"></th>
+                <td th:text="${t.department.name}"></td>
+                <td th:text="${t.phoneNumber}"></td>
+                <td th:text="${t.customerReviews}"></td>
+                <td th:text="${t.createdAt}"></td>
+                <td th:text="${t.description}"></td>
+                <td th:text="${t.status ? 'Đã xử lý' : 'Chưa xử lí'}"></td>
+                <td th:text="${t.updatedAt}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

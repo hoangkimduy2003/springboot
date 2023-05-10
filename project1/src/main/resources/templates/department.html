@@ -1,0 +1,15 @@
+<html layout:decorate="/home.html">
+<head></head>
+<body>
+<div layout:fragment="content">
+    <form th:action="@{/department/create}" method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name">
+        </div>
+        <button type="submit" class="btn btn-primary">Thêm</button>
+    </form>
+</div>
+</body>
+
+</html>
