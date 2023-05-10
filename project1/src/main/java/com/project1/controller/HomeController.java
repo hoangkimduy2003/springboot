@@ -28,8 +28,9 @@ public class HomeController {
                              @ModelAttribute("searchDTO") SearchDTO searchDTO) {
         searchDTO.setKeyWord(searchDTO.getKeyWord() == null ? "" : searchDTO.getKeyWord());
         searchDTO.setStart(searchDTO.getStart() == null ? null : searchDTO.getStart());
+
         model.addAttribute("departmentList", departmentService.getAll(0).getData());
-        model.addAttribute("ticketList",ticketService.getAll(0).getData());
+        model.addAttribute("ticketList",ticketService.searchByCreatedAt(searchDTO,0).getData());
         model.addAttribute("searchDTO",searchDTO);
         return "homeTicket";
     }

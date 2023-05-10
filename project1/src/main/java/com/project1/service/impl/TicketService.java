@@ -1,6 +1,7 @@
 package com.project1.service.impl;
 
 import com.project1.dto.PageDTO;
+import com.project1.dto.SearchDTO;
 import com.project1.dto.TicketDTO;
 import com.project1.entity.Ticket;
 import com.project1.reponsitory.TicketReponsitory;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,5 +66,26 @@ public class TicketService implements ITicketService {
     @Override
     public TicketDTO getById(Integer id) {
         return convertToDto(ticketReponsitory.findById(id).orElse(null));
+    }
+
+    @Override
+    public PageDTO<List<TicketDTO>> searchByCreatedAt(SearchDTO searchDTO,int page) {
+        PageDTO<List<TicketDTO>> pageDTO = new PageDTO<>();
+
+        Page<Ticket> pageEntity = ticketReponsitory.searchByCreatedAt(searchDTO.getStart(),
+                searchDTO.getEnd(),
+                searchDTO.getDepartmentId(),
+                searchDTO.getKeyWord(),
+                PageRequest.of(page,5));
+
+        pageDTO.setTotalPages(pageEntity.getTotalPages());
+        pageDTO.setTotalElements(pageEntity.getTotalElements());
+
+        List<TicketDTO> list = pageEntity.get().map(u -> convertToDto(u)).collect(Collectors.toList());
+
+        pageDTO.setData(list);
+
+        return pageDTO;
+
     }
 }
