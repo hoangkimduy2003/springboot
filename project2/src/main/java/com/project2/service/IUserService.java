@@ -14,5 +14,5 @@ public interface IUserService {
     void create(UserDTO userDTO);
     void update(UserDTO userDTO);
     void delete(Integer id);
-    PageDTO<UserDTO> getAll();
+    PageDTO<List<UserDTO>> getAll();
 }

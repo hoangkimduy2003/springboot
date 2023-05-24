@@ -8,17 +8,16 @@
         <version>3.0.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.demoProduct</groupId>
-    <artifactId>demo_product</artifactId>
+    <groupId>com.product</groupId>
+    <artifactId>product</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>demo_product</name>
-    <description>Demo project for Spring Boot</description>
+    <name>product</name>
+    <description>product</description>
     <properties>
         <java.version>17</java.version>
     </properties>
     <dependencies>
-
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>

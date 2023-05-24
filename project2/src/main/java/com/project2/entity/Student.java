@@ -13,6 +13,7 @@ public class Student {
 
     @MapsId
     @OneToOne
+    @PrimaryKeyJoinColumn
     private User user;
 
     private String studentCode;

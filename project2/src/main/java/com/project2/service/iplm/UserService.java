@@ -65,8 +65,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public PageDTO<UserDTO> getAll() {
-        Page<User> page = userRepo.findAll(PageRequest.of(0,150);
-//        return convertPageDTO());
+    public PageDTO<List<UserDTO>> getAll() {
+        Page<User> page = userRepo.findAll(PageRequest.of(0,100));
+        return convertPageDTO(page);
     }
 }
