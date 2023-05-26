@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ReponseDTO<UserDTO> create(@ModelAttribute @Valid UserDTO userDTO) throws IOException {
+    public ReponseDTO<UserDTO> create(@RequestBody @Valid UserDTO userDTO) throws IOException {
 
         if (!userDTO.getFile().isEmpty()) {
             String fileName = userDTO.getFile().getOriginalFilename();
@@ -63,7 +63,7 @@ public class UserController {
 
     @PutMapping("")
     public ReponseDTO<UserDTO> update(
-            @ModelAttribute @Valid UserDTO userDTO
+            @RequestBody @Valid UserDTO userDTO
     ) throws IOException {
         if(!userDTO.getFile().isEmpty()){
             String fileName =userDTO.getFile().getOriginalFilename();

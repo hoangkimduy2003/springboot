@@ -12,7 +12,8 @@ public class Student {
     private Integer id;
 
     @MapsId
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn
     private User user;
 

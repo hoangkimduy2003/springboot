@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class StudentDTO {
-    private UserDTO userDTO;
-    private String StudentCode;
+    private Integer id;
+    private UserDTO user;
+    private String studentCode;
 }
