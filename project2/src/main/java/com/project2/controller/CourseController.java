@@ -32,4 +32,24 @@ public class CourseController {
                 .msg("Create course success")
                 .build();
     }
+
+    @PutMapping("/{id}")
+    public ReponseDTO<CourseDTO> update(@RequestBody CourseDTO courseDTO,
+                                        @PathVariable("id") Integer id){
+        courseDTO.setId(id);
+        courseService.update(courseDTO);
+        return ReponseDTO.<CourseDTO>builder()
+                .data(courseDTO)
+                .msg("Update success")
+                .status(200)
+                .build();
+    }
+    @DeleteMapping("/{id}")
+    public ReponseDTO<Void> delete(@PathVariable("id") Integer id){
+        courseService.delete(id);
+        return ReponseDTO.<Void>builder()
+                .msg("Delete success")
+                .status(200)
+                .build();
+    }
 }

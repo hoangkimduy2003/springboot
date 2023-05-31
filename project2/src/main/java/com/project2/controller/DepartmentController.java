@@ -26,6 +26,14 @@ public class DepartmentController {
                 .build();
     }
 
+    @GetMapping("/{id}")
+    public ReponseDTO<DepartmentDTO> getById(@PathVariable("id") Integer id){
+        return ReponseDTO.<DepartmentDTO>builder()
+                .data(departmentService.findById(id))
+                .build();
+    }
+
+
     @PostMapping("")
     public ReponseDTO<DepartmentDTO> createDepartment(
             @RequestBody @Valid DepartmentDTO department
@@ -34,6 +42,14 @@ public class DepartmentController {
         return ReponseDTO.<DepartmentDTO>builder()
                 .status(200)
                 .msg("Thêm thành công")
+                .build();
+    }
+    @DeleteMapping("/{id}")
+    public ReponseDTO<Void> delete(@PathVariable("id") Integer id){
+        departmentService.delete(id);
+        return ReponseDTO.<Void>builder()
+                .status(200)
+                .msg("Delete department success")
                 .build();
     }
 

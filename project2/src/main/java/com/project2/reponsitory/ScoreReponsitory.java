@@ -18,11 +18,11 @@ public interface ScoreReponsitory extends JpaRepository<Score,Integer> {
     @Query("select s from Score s where s.course.id = :cid")
     Page<Score> searchByCourse(@Param("cid") Integer id,Pageable pageable);
 
-    @Query("select new com.project2.dto.AvgScoreByCourse(c.id,c.name,avg(s.course))" +
+    @Query("select new com.project2.dto.AvgScoreByCourse(c.id,c.name,AVG(s.score))" +
             " from Score s join s.course c group by c.id,c.name")
     List<AvgScoreByCourse> avgScoreByCourse();
 
-    @Query("select new com.project2.dto.AvgScoreByStudent(st.id,st.studentCode,st.user.name,avg(s.student))" +
-            " from Score s join s.student st group by st.id, st.studentCode")
+    @Query("select new com.project2.dto.AvgScoreByStudent(st.id,st.studentCode,st.user.name,AVG(s.score))" +
+            " from Score s join s.student st group by st.id, st.studentCode ,st.user.name")
     List<AvgScoreByStudent> avgScoreByStudent();
 }

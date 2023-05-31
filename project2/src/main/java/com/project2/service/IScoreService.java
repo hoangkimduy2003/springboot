@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,11 +66,13 @@ public interface IScoreService {
         }
 
         @Override
+        @Transactional
         public void create(ScoreDTO scoreDTO) {
             scoreRepo.save(convertToEntity(scoreDTO));
         }
 
         @Override
+        @Transactional
         public void update(ScoreDTO scoreDTO) {
             Score score = scoreRepo.findById(scoreDTO.getId()).orElse(null);
             if (score != null) {
@@ -79,6 +82,7 @@ public interface IScoreService {
         }
 
         @Override
+        @Transactional
         public void delete(Integer id) {
             scoreRepo.deleteById(id);
         }

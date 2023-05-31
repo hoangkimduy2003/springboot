@@ -1,5 +1,7 @@
 package com.project2.controller;
 
+import com.project2.dto.AvgScoreByCourse;
+import com.project2.dto.AvgScoreByStudent;
 import com.project2.dto.ReponseDTO;
 import com.project2.dto.ScoreDTO;
 import com.project2.entity.Score;
@@ -22,6 +24,23 @@ public class ScoreController {
                 .data(scoreService.getAll().getData())
                 .status(200)
                 .msg("Get all score success")
+                .build();
+    }
+
+    @GetMapping("/avgScoreByCousre")
+    public ReponseDTO<List<AvgScoreByCourse>> getAvgScoreByCourse(){
+        return ReponseDTO.<List<AvgScoreByCourse>>builder()
+                .data(scoreService.getAvgScoreByCourse())
+                .status(200)
+                .msg("Avg score by course success")
+                .build();
+    }
+    @GetMapping("/avgScoreByStudent")
+    public ReponseDTO<List<AvgScoreByStudent>> getAvgScoreByStudent(){
+        return ReponseDTO.<List<AvgScoreByStudent>>builder()
+                .data(scoreService.getAvgScoreByStudent())
+                .status(200)
+                .msg("Avg score by student success")
                 .build();
     }
 

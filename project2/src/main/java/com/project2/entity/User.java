@@ -28,6 +28,7 @@ public class User {
 
     private String homeAddress;
 
+    @Temporal(TemporalType.DATE)
     private Date birthdate;
 
 

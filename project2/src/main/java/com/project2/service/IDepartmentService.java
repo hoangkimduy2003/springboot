@@ -13,6 +13,6 @@ public interface IDepartmentService {
     PageDTO<List<DepartmentDTO>> getAll();
     DepartmentDTO findById(Integer id);
     void create(DepartmentDTO departmentDTO);
-    void update(DepartmentDTO departmentDTO);
+    DepartmentDTO update(DepartmentDTO departmentDTO);
     void delete(Integer id);
 }
