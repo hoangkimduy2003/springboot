@@ -11,4 +11,6 @@ public interface UserReponsitory extends JpaRepository<User,Integer> {
 
     @Query("select u from User u where DAY(u.birthdate) = :day and MONTH(u.birthdate) = :month")
     List<User> searchByBirthDate(@Param("day") int day,@Param("month") int month);
+
+    User findByUsername(String username);
 }

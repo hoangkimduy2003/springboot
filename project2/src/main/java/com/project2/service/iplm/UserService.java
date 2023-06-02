@@ -9,15 +9,20 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements IUserService {
+public class UserService implements IUserService, UserDetailsService {
 
     @Autowired
     private UserReponsitory userRepo;
@@ -46,7 +51,10 @@ public class UserService implements IUserService {
     @Transactional
     @Override
     public void create(UserDTO userDTO) {
-        userRepo.save(convertToEntity(userDTO));
+        User user = convertToEntity(userDTO);
+
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        userRepo.save(user);
     }
 
     @Transactional
@@ -55,6 +63,7 @@ public class UserService implements IUserService {
         User user = userRepo.findById(userDTO.getId()).orElse(null);
         if(user != null){
             user = convertToEntity(userDTO);
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         }
         userRepo.save(user);
     }
@@ -68,5 +77,21 @@ public class UserService implements IUserService {
     public PageDTO<List<UserDTO>> getAll() {
         Page<User> page = userRepo.findAll(PageRequest.of(0,100));
         return convertPageDTO(page);
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User userEntity = userRepo.findByUsername(username);
+        if(userEntity ==null){
+            throw new UsernameNotFoundException("Not found");
+        }
+
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        for(String role: userEntity.getRoles()){
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
+        return new org.springframework.security.core.userdetails.User(username,userEntity.getPassword(), authorities);
     }
 }

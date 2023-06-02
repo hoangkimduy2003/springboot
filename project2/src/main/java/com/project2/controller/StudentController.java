@@ -24,6 +24,8 @@ public class StudentController {
                 .status(200)
                 .build();
     }
+
+
     @PostMapping("")
     public ReponseDTO<StudentDTO> create(@RequestBody StudentDTO studentDTO){
         studentService.create(studentDTO);
