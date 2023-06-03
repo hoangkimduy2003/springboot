@@ -9,15 +9,12 @@ import java.util.List;
 @Data
 @Entity
 public class ProductDemo {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long quantity;
+    @ManyToOne
+    @JsonIgnore
+    private Product product;
 
-    private String name;
-
-
-    @ElementCollection
-    @Column(columnDefinition = "LONGBLOB")
-    private List<byte[]> listImages;
 }

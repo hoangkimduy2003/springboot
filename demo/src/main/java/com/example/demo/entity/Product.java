@@ -15,14 +15,23 @@ public class Product {
 
     private String Name;
 
+    private Long totalQuantity;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,
+    fetch = FetchType.EAGER)
+    private List<ProductDemo> productDemos;
+
+//    @PrePersist
+//    @PreUpdate
+//    public void create() {
+//        long total = 0;
+//        for (ProductDemo p : productDemos) {
+//            p.setProduct(this);
+//            total += p.getQuantity();
+//        }
+//        setTotalQuantity(total);
+//    }
 
     @ElementCollection
     private List<String> images;
-
-//    @ManyToMany
-//    @JoinTable(name = "product_brand",
-//    joinColumns = @JoinColumn(name = "product_id"),
-//    inverseJoinColumns = @JoinColumn(name = "brand_id"))
-//    private List<Brand> brands;
-
 }

@@ -38,18 +38,18 @@ public class ProductController {
 
     @PostMapping("")
     public ProductDTO add(@ModelAttribute ProductDTO productDTO) throws IOException {
-        List<String> images = new ArrayList<>();
-        if (productDTO.getFiles() != null) {
-            for (MultipartFile x : productDTO.getFiles() ) {
-                String name = x.getOriginalFilename();
-                //
-                File file = new File("D:/file/" + name);
-                x.transferTo(file);
-                //
-                images.add(name);
-            }
-        }
-        productDTO.setImages(images);
+//        List<String> images = new ArrayList<>();
+//        if (productDTO.getFiles() != null) {
+//            for (MultipartFile x : productDTO.getFiles() ) {
+//                String name = x.getOriginalFilename();
+//
+//                File file = new File("D:/file/" + name);
+//                x.transferTo(file);
+//
+//                images.add(name);
+//            }
+//        }
+//        productDTO.setImages(images);
         productService.create(productDTO);
         return productDTO;
     }
@@ -62,5 +62,9 @@ public class ProductController {
         return productDTO;
     }
 
+    @DeleteMapping("/{id}")
+    public void update( @PathVariable("id") Integer id) {
+        productService.delete(id);
 
+    }
 }

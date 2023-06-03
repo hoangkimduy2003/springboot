@@ -25,18 +25,6 @@ public class ProductDemoController {
 
     @PostMapping("")
     public ProductDemoDTO addObject(@ModelAttribute ProductDemoDTO productDemoDTO) {
-        List<byte[]> list = new ArrayList<>();
-        try {
-
-            if(productDemoDTO.getFiles()!= null){
-                for (MultipartFile image : productDemoDTO.getFiles()) {
-                    list.add(image.getBytes());
-                }
-            }
-        } catch (Exception e) {
-
-        }
-        productDemoDTO.setListImages(list);
         productDemoService.create(productDemoDTO);
         return productDemoDTO;
     }

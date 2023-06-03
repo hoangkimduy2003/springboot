@@ -4,7 +4,11 @@ import com.ecommerce.ecommerce.dto.ProductDTO;
 import com.ecommerce.ecommerce.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,7 +29,16 @@ public class ProductController {
     }
 
     @PostMapping("")
-    public ProductDTO create(@RequestBody ProductDTO productDTO) {
+    public ProductDTO create(@ModelAttribute ProductDTO productDTO) throws IOException {
+        List<String> imgs = new ArrayList<>();
+        for (MultipartFile x : productDTO.getFiles()) {
+            imgs.add(x.getOriginalFilename());
+            File fileSave =
+                    new File("D:/project_vuejs/project/projectVueJs/" +
+                            "ecommerce/src/assets/images/" + x.getOriginalFilename());
+            x.transferTo(fileSave);
+        }
+        productDTO.setImages(imgs);
         return productService.create(productDTO);
     }
 

@@ -14,13 +14,14 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @OneToMany(mappedBy = "cart")
-    private List<Product> products;
-
     @OneToOne
     private User user;
 
-    private Long quantity;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    private List<CartDetail> cartDetails;
 
     private BigDecimal totalMoney;
+
+
 }

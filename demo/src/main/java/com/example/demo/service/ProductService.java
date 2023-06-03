@@ -34,4 +34,7 @@ public class ProductService {
         }
         productRepo.save(product);
     }
+    public void delete(Integer id){
+        productRepo.deleteById(id);
+    }
 }

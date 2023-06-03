@@ -19,7 +19,7 @@ public class User {
     private String email;
     private String phoneNumber;
     private String address;
-
+    private String password;
     @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
     @JsonIgnore

@@ -3,12 +3,13 @@ package com.ecommerce.ecommerce.dto;
 import com.ecommerce.ecommerce.entity.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ProductDetailDTO {
     private Long id;
-    private String image;
     private Long quantity;
-    private CategoryDTO category;
+    private Long quantitySold;
     private ColorDTO color;
     private SizeDTO size;
 }

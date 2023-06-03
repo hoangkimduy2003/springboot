@@ -4,19 +4,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-@Data
 @Entity
-public class Color extends TimeAuditable {
+@Data
+public class CartDetail {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @ManyToOne
+    private Product product;
 
-    @OneToMany(mappedBy = "color")
+    private Long quantity;
+    private BigDecimal totalMoney;
+
+    @ManyToOne
     @JsonIgnore
-    private List<ProductDetail> productDetails;
+    private Cart cart;
 
 }
