@@ -1,11 +1,14 @@
 package com.ecommerce.ecommerce.service;
 
 
+import com.ecommerce.ecommerce.dto.PageDTO;
 import com.ecommerce.ecommerce.dto.ProductDTO;
 import com.ecommerce.ecommerce.entity.Product;
 import com.ecommerce.ecommerce.reponsitory.ProductReponsitory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,10 @@ public interface IProductService {
     Product convertToEntity(ProductDTO productDTO);
 
     List<ProductDTO> getAll();
+
+    PageDTO<List<ProductDTO>> getBanChay(int index);
+
+    PageDTO<List<ProductDTO>> getNew(int index);
 
     ProductDTO getById(Long id);
 
@@ -45,6 +52,28 @@ public interface IProductService {
         @Override
         public List<ProductDTO> getAll() {
             return productRepo.findAll().stream().map(u -> convertToDto(u)).collect(Collectors.toList());
+        }
+
+        @Override
+        public PageDTO<List<ProductDTO>> getBanChay(int index) {
+            Page<Product> page = productRepo.getBanChay(PageRequest.of(index,4));
+            List<ProductDTO> list = page.get().map(u->convertToDto(u)).collect(Collectors.toList());
+            return PageDTO.<List<ProductDTO>>builder()
+                    .data(list)
+                    .totalElements(page.getTotalElements())
+                    .totalpages(page.getTotalPages())
+                    .build();
+        }
+
+        @Override
+        public PageDTO<List<ProductDTO>> getNew(int index) {
+            Page<Product> page = productRepo.getNew(PageRequest.of(index,4));
+            List<ProductDTO> list = page.get().map(u->convertToDto(u)).collect(Collectors.toList());
+            return PageDTO.<List<ProductDTO>>builder()
+                    .data(list)
+                    .totalElements(page.getTotalElements())
+                    .totalpages(page.getTotalPages())
+                    .build();
         }
 
         @Override

@@ -16,7 +16,7 @@ public class CartDetail {
     private Long id;
 
     @ManyToOne
-    private Product product;
+    private ProductDetail productDetail;
 
     private Long quantity;
     private BigDecimal totalMoney;
@@ -24,5 +24,17 @@ public class CartDetail {
     @ManyToOne
     @JsonIgnore
     private Cart cart;
+
+    private BigDecimal price;
+
+    private boolean status;
+
+    @PrePersist
+    @PreUpdate
+    public void pre(){
+        setPrice(productDetail.getPrice());
+        BigDecimal total = price.multiply(new BigDecimal(quantity));
+        setTotalMoney(total);
+    }
 
 }

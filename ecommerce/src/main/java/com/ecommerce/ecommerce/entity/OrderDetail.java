@@ -14,7 +14,7 @@ public class OrderDetail {
     private Long id;
 
     @ManyToOne
-    private Product product;
+    private ProductDetail productDetail;
 
     private Long quantity;
     private BigDecimal totalMoney;
@@ -22,4 +22,14 @@ public class OrderDetail {
     @ManyToOne
     @JsonIgnore
     private Orders orders;
+
+    private BigDecimal price;
+
+    @PrePersist
+    @PreUpdate
+    public void pre(){
+        setPrice(productDetail.getPrice());
+        BigDecimal total = price.multiply(new BigDecimal(quantity));
+        setTotalMoney(total);
+    }
 }

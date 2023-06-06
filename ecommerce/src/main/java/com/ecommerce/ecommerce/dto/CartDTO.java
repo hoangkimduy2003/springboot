@@ -1,14 +1,15 @@
 package com.ecommerce.ecommerce.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 public class CartDTO {
-    public Long id;
-    private List<ProductDTO> products;
-    private Long quantity;
-    private BigDecimal totalMoney;
+    private Long id;
+    @JsonIgnore
+    private UserDTO user;
+    private List<CartDetailDTO> cartDetails;
+
 }

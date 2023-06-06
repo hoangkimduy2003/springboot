@@ -25,6 +25,8 @@ public interface IUserService {
 
     void delete(Long id);
 
+    UserDTO getByOneUser(String email);
+
     @Service
     class UserService implements IUserService {
 
@@ -70,6 +72,11 @@ public interface IUserService {
         @Override
         public void delete(Long id) {
             userRepo.deleteById(id);
+        }
+
+        @Override
+        public UserDTO getByOneUser(String email) {
+            return convertToDto(userRepo.getByUser(email));
         }
     }
 }

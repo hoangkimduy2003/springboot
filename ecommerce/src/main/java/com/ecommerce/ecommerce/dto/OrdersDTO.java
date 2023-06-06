@@ -5,6 +5,7 @@ import com.ecommerce.ecommerce.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -18,8 +19,11 @@ public class OrdersDTO {
 
     private UserDTO user;
 
+    @NotBlank(message = "Fullname cannot be blank")
     private String fullName;
+    @NotBlank(message = "Phonenumber cannot be blank")
     private String phoneNumber;
+    @NotBlank(message = "Address cannot be blank")
     private String address;
     private String note;
     private Date orderDate;

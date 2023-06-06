@@ -14,12 +14,11 @@ public class Product extends TimeAuditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
+    private BigDecimal price;
     private Long totalQuantity;
     private Long totalQuantitySold;
     private BigDecimal importPrice;
-    private BigDecimal price;
     private String description;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -29,13 +28,6 @@ public class Product extends TimeAuditable {
             fetch = FetchType.EAGER)
     private List<ProductDetail> productDetails;
 
-    @OneToMany(mappedBy = "product")
-    @JsonIgnore
-    private List<OrderDetail> orderDetails;
-
-    @OneToMany(mappedBy = "product")
-    @JsonIgnore
-    private List<CartDetail> cartDetails;
 
     @ManyToOne
     private Category category;

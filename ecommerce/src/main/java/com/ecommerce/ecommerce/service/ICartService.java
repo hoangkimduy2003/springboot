@@ -17,6 +17,8 @@ public interface ICartService {
 
     List<CartDTO> getAll();
 
+    CartDTO getByUser(Long id);
+
     CartDTO getById(Long id);
 
     CartDTO create(CartDTO cartDTO);
@@ -44,6 +46,11 @@ public interface ICartService {
         @Override
         public List<CartDTO> getAll() {
             return cartRepo.findAll().stream().map(u -> convertToDto(u)).collect(Collectors.toList());
+        }
+
+        @Override
+        public CartDTO getByUser(Long id) {
+            return convertToDto(cartRepo.getByUser(id));
         }
 
         @Override

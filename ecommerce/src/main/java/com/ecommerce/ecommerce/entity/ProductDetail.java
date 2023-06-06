@@ -13,9 +13,10 @@ public class ProductDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String name;
     private Long quantity;
     private Long quantitySold;
+    private BigDecimal price;
 
     @ManyToOne
     private Color color;
@@ -26,5 +27,21 @@ public class ProductDetail {
     @ManyToOne
     @JsonIgnore
     private Product product;
+
+    @OneToMany(mappedBy = "productDetail")
+    @JsonIgnore
+    private List<OrderDetail> orderDetails;
+
+    @OneToMany(mappedBy = "productDetail")
+    @JsonIgnore
+    private List<CartDetail> cartDetails;
+
+    @PrePersist
+    @PreUpdate
+    public void Pre(){
+        setPrice(product.getPrice());
+        setName(product.getName());
+    }
+
 
 }

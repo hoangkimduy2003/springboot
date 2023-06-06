@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/product")
+@CrossOrigin
 public class ProductController {
 
     @Autowired
@@ -28,14 +29,26 @@ public class ProductController {
         return productService.getById(id);
     }
 
+    @GetMapping("/banchay/{index}")
+    public List<ProductDTO> getBanChay(@PathVariable("index") int index){
+        List<ProductDTO> list = productService.getBanChay(index).getData();
+        return list;
+    }
+
+    @GetMapping("/new/{index}")
+    public List<ProductDTO> getNew(@PathVariable("index") int index){
+        List<ProductDTO> list = productService.getNew(index).getData();
+        return list;
+    }
+
+
     @PostMapping("")
     public ProductDTO create(@ModelAttribute ProductDTO productDTO) throws IOException {
         List<String> imgs = new ArrayList<>();
         for (MultipartFile x : productDTO.getFiles()) {
             imgs.add(x.getOriginalFilename());
             File fileSave =
-                    new File("D:/project_vuejs/project/projectVueJs/" +
-                            "ecommerce/src/assets/images/" + x.getOriginalFilename());
+                    new File("C:/Duyhkph28819/Web207/Assignment/images/" + x.getOriginalFilename());
             x.transferTo(fileSave);
         }
         productDTO.setImages(imgs);
@@ -43,8 +56,16 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ProductDTO update(@RequestBody ProductDTO productDTO,
-                             @PathVariable("id") Long id) {
+    public ProductDTO update(@ModelAttribute ProductDTO productDTO,
+                             @PathVariable("id") Long id) throws Exception{
+        List<String> imgs = new ArrayList<>();
+        for (MultipartFile x : productDTO.getFiles()) {
+            imgs.add(x.getOriginalFilename());
+            File fileSave =
+                    new File("C:/Duyhkph28819/Web207/Assignment/images/" + x.getOriginalFilename());
+            x.transferTo(fileSave);
+        }
+        productDTO.setImages(imgs);
         productDTO.setId(id);
         return productService.update(productDTO);
     }

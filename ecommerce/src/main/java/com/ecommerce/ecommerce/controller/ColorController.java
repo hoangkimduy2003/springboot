@@ -3,6 +3,7 @@ package com.ecommerce.ecommerce.controller;
 import com.ecommerce.ecommerce.dto.ColorDTO;
 import com.ecommerce.ecommerce.dto.SizeDTO;
 import com.ecommerce.ecommerce.service.IColorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,12 +27,12 @@ public class ColorController {
     }
 
     @PostMapping("")
-    public ColorDTO create(@RequestBody ColorDTO colorDTO) {
+    public ColorDTO create(@RequestBody @Valid ColorDTO colorDTO) {
         return colorService.create(colorDTO);
     }
 
     @PutMapping("/{id}")
-    public ColorDTO update(@RequestBody ColorDTO colorDTO,
+    public ColorDTO update(@RequestBody @Valid ColorDTO colorDTO,
                           @PathVariable("id") Long id) {
         colorDTO.setId(id);
         return colorService.update(colorDTO);

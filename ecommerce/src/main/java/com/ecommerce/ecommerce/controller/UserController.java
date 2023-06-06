@@ -25,6 +25,12 @@ public class UserController {
         return userService.getById(id);
     }
 
+    @GetMapping("/email/{email}")
+    public UserDTO getByEmail(@PathVariable("email") String email) {
+        return userService.getByOneUser(email);
+    }
+
+
     @PostMapping("")
     public UserDTO create(@RequestBody UserDTO userDTO) {
         return userService.create(userDTO);

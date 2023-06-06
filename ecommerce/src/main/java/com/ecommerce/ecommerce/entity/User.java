@@ -12,7 +12,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     private String fullName;
@@ -20,6 +20,7 @@ public class User {
     private String phoneNumber;
     private String address;
     private String password;
+
     @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
     @JsonIgnore
@@ -36,4 +37,10 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"))
     private List<String> roles;
 
+    @PrePersist
+    public void pre(){
+        Cart cartUser = new Cart();
+        cartUser.setUser(this);
+        setCart(cartUser);
+    }
 }
