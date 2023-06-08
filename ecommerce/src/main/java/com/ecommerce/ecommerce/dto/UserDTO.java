@@ -16,6 +16,6 @@ public class UserDTO {
     private String phoneNumber;
     private String address;
     private String password;
-    private List<String> roles;
+    private String role;
     private CartDTO cart;
 }

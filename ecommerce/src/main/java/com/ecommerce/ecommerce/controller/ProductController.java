@@ -2,7 +2,10 @@ package com.ecommerce.ecommerce.controller;
 
 import com.ecommerce.ecommerce.dto.ProductDTO;
 import com.ecommerce.ecommerce.service.IProductService;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +28,9 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
+//    @Secured({"ROLE_ADMIN"})
+//    @RolesAllowed({"ROLE_ADMIN"})
+//    @PreAuthorize("hasAnyAtu")
     public ProductDTO getById(@PathVariable("id") Long id) {
         return productService.getById(id);
     }

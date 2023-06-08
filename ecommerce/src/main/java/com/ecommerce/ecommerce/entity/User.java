@@ -32,10 +32,7 @@ public class User {
     @JsonIgnore
     private List<Orders> orders;
 
-    @ElementCollection
-    @CollectionTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"))
-    private List<String> roles;
+    private String role;
 
     @PrePersist
     public void pre(){

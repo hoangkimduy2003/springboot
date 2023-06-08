@@ -8,4 +8,7 @@ import org.springframework.data.repository.query.Param;
 public interface UserReponsitory extends JpaRepository<User,Long> {
     @Query("SELECT u from User u where u.email = :name")
     User getByUser(@Param("name") String email);
+
+    @Query("select u from User u where u.email = :email")
+    User findByEmail(@Param("email") String username);
 }
