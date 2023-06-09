@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,7 +23,7 @@ public class CartDetail {
     private BigDecimal totalMoney;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonIgnoreProperties("cartDetails")
     private Cart cart;
 
     private BigDecimal price;

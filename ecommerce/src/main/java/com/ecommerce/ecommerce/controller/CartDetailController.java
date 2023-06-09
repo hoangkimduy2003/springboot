@@ -2,6 +2,7 @@ package com.ecommerce.ecommerce.controller;
 
 import com.ecommerce.ecommerce.dto.CartDTO;
 import com.ecommerce.ecommerce.dto.CartDetailDTO;
+import com.ecommerce.ecommerce.dto.ResponseDTO;
 import com.ecommerce.ecommerce.service.ICartDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cartDetail")
+@CrossOrigin
 public class CartDetailController {
 
     @Autowired
@@ -38,7 +40,11 @@ public class CartDetailController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete( @PathVariable("id") Long id){
+    public ResponseDTO<Void> delete(@PathVariable("id") Long id){
         cartDetailService.delete(id);
+        return  ResponseDTO.<Void>builder()
+                .status(200)
+                .msg("Xoá thành công")
+                .build();
     }
 }

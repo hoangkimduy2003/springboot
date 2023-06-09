@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.MapsId;
 import lombok.Data;
 
@@ -13,6 +14,8 @@ public class CartDetailDTO {
     private BigDecimal price;
     private BigDecimal totalMoney;
     private boolean status;
-    @JsonIgnore
+    @JsonIgnoreProperties("cartDetails")
+//    @JsonIgnore
     private CartDTO cart;
+
 }

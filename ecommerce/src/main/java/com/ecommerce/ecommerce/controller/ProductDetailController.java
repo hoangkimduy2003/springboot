@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/productDetail")
+@CrossOrigin
 public class ProductDetailController {
     @Autowired
     private IProductDetailService productDetailService;

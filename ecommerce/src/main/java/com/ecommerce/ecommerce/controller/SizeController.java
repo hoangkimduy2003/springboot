@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/size")
+@CrossOrigin
 public class SizeController {
     @Autowired
     private ISizeService sizeService;

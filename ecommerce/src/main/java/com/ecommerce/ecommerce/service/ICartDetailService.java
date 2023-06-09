@@ -69,6 +69,7 @@ public interface ICartDetailService {
 
         @Override
         public void delete(Long id) {
+            long ida = id;
             cartDetailRepo.deleteById(id);
         }
     }
