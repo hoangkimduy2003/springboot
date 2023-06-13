@@ -24,8 +24,7 @@ public class Product extends TimeAuditable {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> images;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductDetail> productDetails;
 
 
@@ -35,16 +34,15 @@ public class Product extends TimeAuditable {
     //after update and create in db
     @PrePersist
     @PreUpdate
-    public void updateQuantity() {
+    public void preCreate() {
+        long totalSold = 0;
         long totalQuanti = 0;
-        long totalQuantiSole = 0;
         for (ProductDetail detail : productDetails) {
-            totalQuantiSole += (detail.getQuantitySold() + detail.getQuantitySold());
             totalQuanti += detail.getQuantity();
+            totalSold += detail.getQuantitySold();
             detail.setProduct(this);
         }
+        setTotalQuantitySold(totalSold);
         setTotalQuantity(totalQuanti);
-        setTotalQuantitySold(totalQuantiSole);
     }
-
 }

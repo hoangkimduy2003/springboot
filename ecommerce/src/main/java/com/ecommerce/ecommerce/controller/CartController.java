@@ -19,6 +19,10 @@ public class CartController {
     public List<CartDTO> getAll(){
         return cartService.getAll();
     }
+    @GetMapping("/user/{id}")
+    public CartDTO getByUser(@PathVariable("id")Long id){
+        return cartService.getByUser(id);
+    }
 
     @GetMapping("/{id}")
     public CartDTO getById(@PathVariable("id") Long id){

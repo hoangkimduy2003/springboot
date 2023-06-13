@@ -21,14 +21,12 @@ public class User {
     private String address;
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private Cart cart;
 
     @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+            cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Orders> orders;
 
@@ -40,4 +38,5 @@ public class User {
         cartUser.setUser(this);
         setCart(cartUser);
     }
+
 }

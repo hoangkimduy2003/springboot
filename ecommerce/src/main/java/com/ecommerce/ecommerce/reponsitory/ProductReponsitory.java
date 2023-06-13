@@ -12,4 +12,5 @@ public interface ProductReponsitory extends JpaRepository<Product,Long> {
 
     @Query("select p from Product p order by p.createdAt desc ")
     Page<Product> getNew(Pageable pageable);
+
 }

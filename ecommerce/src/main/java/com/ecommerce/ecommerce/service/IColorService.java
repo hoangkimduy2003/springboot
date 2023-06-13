@@ -18,6 +18,8 @@ public interface IColorService {
 
     List<ColorDTO> getAll();
 
+
+
     ColorDTO getById(Long id);
 
     ColorDTO create(ColorDTO colorDTO);
@@ -46,6 +48,8 @@ public interface IColorService {
         public List<ColorDTO> getAll() {
             return colorRepo.findAll().stream().map(u -> convertToDto(u)).collect(Collectors.toList());
         }
+
+
 
         @Override
         public ColorDTO getById(Long id) {

@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.controller;
 
+import com.ecommerce.ecommerce.dto.ChangePasswordDTO;
 import com.ecommerce.ecommerce.dto.ProductDTO;
 import com.ecommerce.ecommerce.dto.UserDTO;
 import com.ecommerce.ecommerce.service.IUserService;
@@ -35,6 +36,11 @@ public class UserController {
     @PostMapping("")
     public UserDTO create(@RequestBody UserDTO userDTO) {
         return userService.create(userDTO);
+    }
+
+    @PutMapping("/updatePassword")
+    public void updatePassword(@RequestBody ChangePasswordDTO changePasswordDTO){
+        userService.updatePassword(changePasswordDTO);
     }
 
     @PutMapping("/{id}")

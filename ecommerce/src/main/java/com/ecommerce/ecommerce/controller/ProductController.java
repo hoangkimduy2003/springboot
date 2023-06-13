@@ -35,43 +35,47 @@ public class ProductController {
         return productService.getById(id);
     }
 
-    @GetMapping("/banchay/{index}")
-    public List<ProductDTO> getBanChay(@PathVariable("index") int index){
-        List<ProductDTO> list = productService.getBanChay(index).getData();
+    @GetMapping("/banchay/{index}/{size}")
+    public List<ProductDTO> getBanChay(@PathVariable("index") int index,
+                                       @PathVariable("size") int size) {
+        List<ProductDTO> list = productService.getBanChay(index,size).getData();
         return list;
     }
 
-    @GetMapping("/new/{index}")
-    public List<ProductDTO> getNew(@PathVariable("index") int index){
-        List<ProductDTO> list = productService.getNew(index).getData();
+    @GetMapping("/new/{index}/{size}")
+    public List<ProductDTO> getNew(@PathVariable("index") int index,
+                                   @PathVariable("size") int size) {
+        List<ProductDTO> list = productService.getNew(index,size).getData();
         return list;
     }
 
 
     @PostMapping("")
-    public ProductDTO create(@ModelAttribute ProductDTO productDTO) throws IOException {
+    public ProductDTO create(@RequestBody ProductDTO productDTO) throws IOException {
         List<String> imgs = new ArrayList<>();
-        for (MultipartFile x : productDTO.getFiles()) {
-            imgs.add(x.getOriginalFilename());
-            File fileSave =
-                    new File("C:/Duyhkph28819/Web207/Assignment/images/" + x.getOriginalFilename());
-            x.transferTo(fileSave);
+        if (productDTO.getFiles() != null) {
+            for (MultipartFile x : productDTO.getFiles()) {
+                imgs.add(x.getOriginalFilename());
+                File fileSave =
+                        new File("C:/Duyhkph28819/Web207/Assignment/images/" + x.getOriginalFilename());
+                x.transferTo(fileSave);
+            }
         }
-        productDTO.setImages(imgs);
         return productService.create(productDTO);
     }
 
     @PutMapping("/{id}")
-    public ProductDTO update(@ModelAttribute ProductDTO productDTO,
-                             @PathVariable("id") Long id) throws Exception{
+    public ProductDTO update(@RequestBody ProductDTO productDTO,
+                             @PathVariable("id") Long id) throws Exception {
         List<String> imgs = new ArrayList<>();
-        for (MultipartFile x : productDTO.getFiles()) {
-            imgs.add(x.getOriginalFilename());
-            File fileSave =
-                    new File("C:/Duyhkph28819/Web207/Assignment/images/" + x.getOriginalFilename());
-            x.transferTo(fileSave);
+        if(productDTO.getFiles() != null){
+            for (MultipartFile x : productDTO.getFiles()) {
+                imgs.add(x.getOriginalFilename());
+                File fileSave =
+                        new File("C:/Duyhkph28819/Web207/Assignment/images/" + x.getOriginalFilename());
+                x.transferTo(fileSave);
+            }
         }
-        productDTO.setImages(imgs);
         productDTO.setId(id);
         return productService.update(productDTO);
     }

@@ -18,7 +18,6 @@ public class CartDetail {
 
     @ManyToOne
     private ProductDetail productDetail;
-
     private Long quantity;
     private BigDecimal totalMoney;
 
@@ -29,13 +28,5 @@ public class CartDetail {
     private BigDecimal price;
 
     private boolean status;
-
-    @PrePersist
-    @PreUpdate
-    public void pre(){
-        setPrice(productDetail.getPrice());
-        BigDecimal total = price.multiply(new BigDecimal(quantity));
-        setTotalMoney(total);
-    }
 
 }

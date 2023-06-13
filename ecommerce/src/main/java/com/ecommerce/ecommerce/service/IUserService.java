@@ -1,7 +1,10 @@
 package com.ecommerce.ecommerce.service;
 
+import com.ecommerce.ecommerce.dto.ChangePasswordDTO;
 import com.ecommerce.ecommerce.dto.UserDTO;
+import com.ecommerce.ecommerce.entity.Cart;
 import com.ecommerce.ecommerce.entity.User;
+import com.ecommerce.ecommerce.reponsitory.CartReponsitory;
 import com.ecommerce.ecommerce.reponsitory.UserReponsitory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,8 @@ public interface IUserService {
 
     UserDTO update(UserDTO sizeDTO);
 
+    void updatePassword(ChangePasswordDTO changePasswordDTO);
+
     void delete(Long id);
 
     UserDTO findByEmail(String email);
@@ -39,6 +44,9 @@ public interface IUserService {
 
         @Autowired
         private UserReponsitory userRepo;
+
+        @Autowired
+        private CartReponsitory cartRepo;
 
         @Override
         public UserDTO convertToDto(User user) {
@@ -64,6 +72,9 @@ public interface IUserService {
         public UserDTO create(UserDTO userDTO) {
             User user = convertToEntity(userDTO);
             user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
+            if (user.getRole() == null) {
+                user.setRole("CUSTOMER");
+            }
             userRepo.save(user);
             return userDTO;
         }
@@ -74,10 +85,25 @@ public interface IUserService {
             if (user != null) {
                 user = convertToEntity(userDTO);
             }
-            user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
+            if (user.getRole() == null) {
+                user.setRole("CUSTOMER");
+            }
+            Cart cart = cartRepo.getByUser(user.getId());
+            user.setCart(cart);
             userRepo.save(user);
             return userDTO;
         }
+
+        @Override
+        public void updatePassword(ChangePasswordDTO changePasswordDTO) {
+            User user = userRepo.findById(changePasswordDTO.getId()).orElse(null);
+            if (user != null) {
+                userRepo.updatePassword(new BCryptPasswordEncoder().
+                                encode(changePasswordDTO.getPasswordNew()),
+                        changePasswordDTO.getId());
+            }
+        }
+
 
         @Override
         public void delete(Long id) {
@@ -100,7 +126,7 @@ public interface IUserService {
             SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userEntity.getRole());
             return new org.springframework.security.core.
                     userdetails.User(username,
-                            userEntity.getPassword(), Collections.singleton(authority));
+                    userEntity.getPassword(), Collections.singleton(authority));
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -28,10 +29,20 @@ public class Orders extends TimeAuditable{
     private String note;
 
     @CreatedDate
+    @JsonFormat(pattern = "HH:mm:ss yyyy-MM-dd", timezone = "Asia/Ho_Chi_Minh")
     @Column(updatable = false)
     private Date orderDate;
     private Date orderDateFinal;
 
     private Integer status;
     private BigDecimal toltalMoney;
+    private Long totalProduct;
+
+    @PrePersist
+    @PreUpdate
+    public void pre(){
+        for (OrderDetail orderDetail: orderDetails){
+            orderDetail.setOrders(this);
+        }
+    }
 }

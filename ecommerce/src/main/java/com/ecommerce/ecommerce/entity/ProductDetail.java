@@ -37,8 +37,14 @@ public class ProductDetail {
     private List<CartDetail> cartDetails;
 
     @PrePersist
-    @PreUpdate
     public void Pre(){
+        long quantity = 0;
+        setPrice(product.getPrice());
+        setName(product.getName());
+        setQuantitySold(quantity);
+    }
+    @PreUpdate
+    public void update(){
         setPrice(product.getPrice());
         setName(product.getName());
     }

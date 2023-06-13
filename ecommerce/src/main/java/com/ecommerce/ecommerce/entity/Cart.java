@@ -1,8 +1,11 @@
 package com.ecommerce.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -17,8 +20,17 @@ public class Cart {
     @JsonIgnore
     private User user;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+    private BigDecimal totalMoney;
+    private Long totalProduct;
+
+    @OneToMany(mappedBy = "cart",
+            cascade = CascadeType.ALL)
     private List<CartDetail> cartDetails;
+
+    @PrePersist
+    public void pre(){
+        setTotalMoney(new BigDecimal(0));
+        setTotalProduct(0L);
+    }
 
 }

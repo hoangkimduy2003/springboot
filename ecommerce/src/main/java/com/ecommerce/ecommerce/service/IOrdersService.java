@@ -1,20 +1,14 @@
 package com.ecommerce.ecommerce.service;
 
 
-import com.ecommerce.ecommerce.dto.CartDTO;
-import com.ecommerce.ecommerce.dto.CartDetailDTO;
-import com.ecommerce.ecommerce.dto.OrderDetailDTO;
-import com.ecommerce.ecommerce.dto.OrdersDTO;
-import com.ecommerce.ecommerce.entity.Cart;
-import com.ecommerce.ecommerce.entity.CartDetail;
-import com.ecommerce.ecommerce.entity.OrderDetail;
-import com.ecommerce.ecommerce.entity.Orders;
-import com.ecommerce.ecommerce.reponsitory.CartReponsitory;
-import com.ecommerce.ecommerce.reponsitory.OrdersReponsitory;
+import com.ecommerce.ecommerce.dto.*;
+import com.ecommerce.ecommerce.entity.*;
+import com.ecommerce.ecommerce.reponsitory.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +19,12 @@ public interface IOrdersService {
     Orders convertToEntity(OrdersDTO ordersDTO);
 
     List<OrdersDTO> getAll();
+
+    List<OrdersDTO> getByUserAndStatus(Long id, Integer status);
+
+    List<OrdersDTO> getByUser(Long id);
+
+    void updateStatus(Integer status, Long id);
 
     OrdersDTO getById(Long id);
 
@@ -41,7 +41,13 @@ public interface IOrdersService {
         private OrdersReponsitory ordersRepo;
 
         @Autowired
-        private ICartService cartService;
+        private CartReponsitory cartRepo;
+
+        @Autowired
+        private ProductReponsitory productRepo;
+
+        @Autowired
+        private CartDetailReponsitory cartDetailRepo;
 
         @Override
         public OrdersDTO convertToDto(Orders orders) {
@@ -55,7 +61,42 @@ public interface IOrdersService {
 
         @Override
         public List<OrdersDTO> getAll() {
-            return ordersRepo.findAll().stream().map(u -> convertToDto(u)).collect(Collectors.toList());
+            return ordersRepo.findAllByOrderDateDesc().stream().map(u -> convertToDto(u)).collect(Collectors.toList());
+        }
+
+        @Override
+        public List<OrdersDTO> getByUserAndStatus(Long id, Integer status) {
+            return ordersRepo.getByUserAndStatus(id, status).stream().map(u -> convertToDto(u)).collect(Collectors.toList());
+        }
+
+        @Override
+        public List<OrdersDTO> getByUser(Long id) {
+            return ordersRepo.getByUser(id).stream().map(o -> convertToDto(o))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public void updateStatus(Integer status, Long id) {
+            if (status == 0) {
+                Orders orders = ordersRepo.findById(id).orElse(null);
+                if (orders != null) {
+                    for (OrderDetail item : orders.getOrderDetails()) {
+                        Product product = productRepo.findById(item.getProductDetail().getProduct().getId()).orElse(null);
+                        ProductDetail detail = product.getProductDetails().stream()
+                                .filter(d -> d.getId() == item.getProductDetail().getId())
+                                .findFirst()
+                                .orElse(null);
+                        if (detail != null) {
+                            detail.setQuantity(detail.getQuantity() + item.getQuantity());
+                            detail.setQuantitySold(detail.getQuantitySold() - item.getQuantity());
+                            product.setTotalQuantitySold(product.getTotalQuantitySold() - item.getQuantity());
+                            product.setTotalQuantity(product.getTotalQuantity() + item.getQuantity());
+                            productRepo.save(product);
+                        }
+                    }
+                }
+            }
+            ordersRepo.updateStatus(status, id);
         }
 
         @Override
@@ -65,16 +106,48 @@ public interface IOrdersService {
 
         @Override
         public OrdersDTO create(OrdersDTO ordersDTO) {
-            List<CartDetailDTO> cartDetailDtos = cartService.getByUser(ordersDTO.getUser().getId()).getCartDetails();
+            Cart cart = cartRepo.getByUser(ordersDTO.getUser().getId());
+//            //convert from cartDetail to orderDetail
+//
+            List<OrderDetail> orderDetails = new ArrayList<>();
+            for (CartDetail cartDetail : cart.getCartDetails()) {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setProductDetail(cartDetail.getProductDetail());
+                orderDetail.setQuantity(cartDetail.getQuantity());
+                orderDetails.add(orderDetail);
+            }
+//             save to order
+            ordersDTO.setToltalMoney(cart.getTotalMoney());
+            ordersDTO.setTotalProduct(cart.getTotalProduct());
+            ordersDTO.setStatus(1);
+            //
+            for (CartDetail item : cart.getCartDetails()) {
+                Product p = productRepo.findById(item.getProductDetail().getProduct().getId()).orElse(null);
+                if (p != null) {
+                    ProductDetail detail = p.getProductDetails().stream()
+                            .filter(d -> d.getId() == item.getProductDetail().getId())
+                            .findFirst()
+                            .orElse(null);
+                    if (detail != null) {
+                        detail.setQuantitySold(detail.getQuantitySold() + item.getQuantity());
+                        detail.setQuantity(detail.getQuantity() - item.getQuantity());
+                        p.setTotalQuantity(p.getTotalQuantity() - item.getQuantity());
+                        p.setTotalQuantitySold(p.getTotalQuantitySold() + item.getQuantity());
+                        productRepo.save(p);
+                    }
+                }
 
-            //convert from cartDetail to orderDetail
-            List<OrderDetailDTO> orderDetails = cartDetailDtos
-                    .stream().map(u -> new ModelMapper().map(u, OrderDetailDTO.class))
-                    .collect(Collectors.toList());
-            //save to order
+            }
+            cartDetailRepo.deleteByCart(cart.getId());
 
-            ordersDTO.setOrderDetails(orderDetails);
-            ordersRepo.save(convertToEntity(ordersDTO));
+            cart.setTotalMoney(new BigDecimal(0));
+            cart.setTotalProduct(0L);
+            cartRepo.save(cart);
+
+            Orders orders = convertToEntity(ordersDTO);
+
+            orders.setOrderDetails(orderDetails);
+            ordersRepo.save(orders);
             return ordersDTO;
         }
 

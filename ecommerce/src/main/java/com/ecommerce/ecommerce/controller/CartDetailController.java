@@ -4,6 +4,7 @@ import com.ecommerce.ecommerce.dto.CartDTO;
 import com.ecommerce.ecommerce.dto.CartDetailDTO;
 import com.ecommerce.ecommerce.dto.ResponseDTO;
 import com.ecommerce.ecommerce.service.ICartDetailService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +41,18 @@ public class CartDetailController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseDTO<Void> delete(@PathVariable("id") Long id){
         cartDetailService.delete(id);
+        return  ResponseDTO.<Void>builder()
+                .status(200)
+                .msg("Xoá thành công")
+                .build();
+    }
+
+    @DeleteMapping("/cart/{id}")
+    public ResponseDTO<Void> deleteByUser(@PathVariable("id") Long id){
+        cartDetailService.deleteByCart(id);
         return  ResponseDTO.<Void>builder()
                 .status(200)
                 .msg("Xoá thành công")

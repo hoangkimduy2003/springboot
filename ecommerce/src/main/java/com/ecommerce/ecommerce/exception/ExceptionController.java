@@ -1,10 +1,7 @@
 package com.ecommerce.ecommerce.exception;
 
 import com.ecommerce.ecommerce.dto.ResponseDTO;
-import jakarta.persistence.NoResultException;
-import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -47,6 +44,14 @@ public class ExceptionController {
         return ResponseDTO.<String>builder()
                 .msg("Tên đăng nhập hoặc mật khẩu không đúng")
                 .status(403)
+                .build();
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseDTO<String> exception(Exception e){
+        return ResponseDTO.<String>builder()
+                .status(500)
+                .msg("Lỗi")
                 .build();
     }
 }

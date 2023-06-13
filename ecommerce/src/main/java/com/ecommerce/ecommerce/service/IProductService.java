@@ -3,7 +3,9 @@ package com.ecommerce.ecommerce.service;
 
 import com.ecommerce.ecommerce.dto.PageDTO;
 import com.ecommerce.ecommerce.dto.ProductDTO;
+import com.ecommerce.ecommerce.dto.ProductDetailDTO;
 import com.ecommerce.ecommerce.entity.Product;
+import com.ecommerce.ecommerce.reponsitory.ProductDetailReponsitory;
 import com.ecommerce.ecommerce.reponsitory.ProductReponsitory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,9 @@ public interface IProductService {
 
     List<ProductDTO> getAll();
 
-    PageDTO<List<ProductDTO>> getBanChay(int index);
+    PageDTO<List<ProductDTO>> getBanChay(int index, int size);
 
-    PageDTO<List<ProductDTO>> getNew(int index);
+    PageDTO<List<ProductDTO>> getNew(int index,int size);
 
     ProductDTO getById(Long id);
 
@@ -38,6 +40,9 @@ public interface IProductService {
 
         @Autowired
         private ProductReponsitory productRepo;
+
+        @Autowired
+        private ProductDetailReponsitory productDetailRepo;
 
         @Override
         public ProductDTO convertToDto(Product product) {
@@ -55,8 +60,8 @@ public interface IProductService {
         }
 
         @Override
-        public PageDTO<List<ProductDTO>> getBanChay(int index) {
-            Page<Product> page = productRepo.getBanChay(PageRequest.of(index,4));
+        public PageDTO<List<ProductDTO>> getBanChay(int index, int size) {
+            Page<Product> page = productRepo.getBanChay(PageRequest.of(index,size));
             List<ProductDTO> list = page.get().map(u->convertToDto(u)).collect(Collectors.toList());
             return PageDTO.<List<ProductDTO>>builder()
                     .data(list)
@@ -66,8 +71,8 @@ public interface IProductService {
         }
 
         @Override
-        public PageDTO<List<ProductDTO>> getNew(int index) {
-            Page<Product> page = productRepo.getNew(PageRequest.of(index,4));
+        public PageDTO<List<ProductDTO>> getNew(int index,int size) {
+            Page<Product> page = productRepo.getNew(PageRequest.of(index,size));
             List<ProductDTO> list = page.get().map(u->convertToDto(u)).collect(Collectors.toList());
             return PageDTO.<List<ProductDTO>>builder()
                     .data(list)
@@ -83,6 +88,9 @@ public interface IProductService {
 
         @Override
         public ProductDTO create(ProductDTO productDTO) {
+            for (ProductDetailDTO x: productDTO.getProductDetails()){
+                x.setQuantitySold(0L);
+            }
             productRepo.save(convertToEntity(productDTO));
             return productDTO;
         }
@@ -90,6 +98,7 @@ public interface IProductService {
         @Override
         public ProductDTO update(ProductDTO productDTO) {
             Product product = productRepo.findById(productDTO.getId()).orElse(null);
+
             if (product != null) {
                 product = convertToEntity(productDTO);
             }
